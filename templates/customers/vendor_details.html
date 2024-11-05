@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Details</title>
+    <!-- Bootstrap CSS for styling -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        .card-body {
+            padding: 40px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #007bff;
+        }
+        h5, h6 {
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        h5 {
+            font-size: 1.75rem;
+        }
+        h6 {
+            font-size: 1.25rem;
+            color: #28a745; /* Green color for success message */
+        }
+        .btn-primary {
+            font-size: 1rem;
+            padding: 10px 30px;
+            border-radius: 25px;
+        }
+        .container {
+            max-width: 600px;
+        }
+        .mt-5 {
+            margin-top: 5rem;
+        }
+        .card-body h3, .card-body h4 {
+            color: #343a40;
+        }
+        .feedback-section {
+            margin-top: 30px;
+        }
+        .star {
+            font-size: 30px;
+            color: gray;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .star.selected,
+        .star:hover {
+            color: gold; /* Selected stars */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Order Confirmed</h1>
+        <div class="card">
+            <div class="card-body">
+<!--                <h5>Username Name: {{ username }}</h5>-->
+                <h5>Customer Name: {{ customer_name }}</h5>
+                <h5>Plan Ordered: {{ plan_type }}</h5>
+                <h6>Payment Status: Payment Successful!</h6>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3>Vendor Name: {{ vendor_name }}</h3>
+                <h4>Vendor Phone: {{ vendor_phone }}</h4>
+            </div>
+        </div>
+
+        <div class="card mt-4 feedback-section">
+            <div class="card-body">
+                <h5>Rate Your Experience</h5>
+                <form id="feedbackForm" action="{% url 'submit_feedback' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="customer_name" value="{{ customer_name }}">
+                    <input type="hidden" name="plan_type" value="{{ plan_type }}">
+                    <input type="hidden" name="vendor_name" value="{{ vendor_name }}">
+                    <input type="hidden" name="vendor_phone" value="{{ vendor_phone }}">
+                    <input type="hidden" name="rating" id="rating" value="">
+
+                    <div class="form-group">
+                        <label for="rating">Rating:</label><br>
+                        <div id="star-rating" class="star-rating">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback">Feedback:</label>
+                        <textarea class="form-control" id="feedback" name="feedback" rows="4" placeholder="Your feedback here..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submitButton" disabled>Submit Feedback</button>
+                </form>
+                <div id="thank-you-message" class="mt-3" style="display: none;">
+                    <h6 class="text-success">Thank you for your feedback!</h6>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'loggedin' %}" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('rating');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const thankYouMessage = document.getElementById('thank-you-message');
+        const submitButton = document.getElementById('submitButton');
+        const feedbackTextarea = document.getElementById('feedback');
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const rating = star.getAttribute('data-value');
+                clearSelections();
+                highlightStars(rating);
+                ratingInput.value = rating; // Set the hidden input value
+                checkFormValidity(); // Check form validity on rating selection
+            });
+        });
+
+        feedbackTextarea.addEventListener('input', () => {
+            checkFormValidity(); // Check form validity on feedback input
+        });
+
+        function clearSelections() {
+            stars.forEach(star => {
+                star.classList.remove('selected');
+            });
+        }
+
+        function highlightStars(rating) {
+            for (let i = 0; i < rating; i++) {
+                stars[i].classList.add('selected');
+            }
+        }
+
+        function checkFormValidity() {
+            const ratingSelected = ratingInput.value !== "";
+            const feedbackEntered = feedbackTextarea.value.trim() !== "";
+            submitButton.disabled = !(ratingSelected && feedbackEntered); // Enable or disable button
+        }
+
+      feedbackForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // Prevent actual form submission
+    const formData = new FormData(feedbackForm);
+
+    fetch(feedbackForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',  // Make sure to send the CSRF token if using AJAX
+        }
+    }).then(response => {
+        if (response.ok) {
+            thankYouMessage.style.display = 'block'; // Show thank you message
+            feedbackForm.reset(); // Reset the form after submission
+        } else {
+            alert('Error submitting feedback.');
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+    </script>
+</body>
+</html>

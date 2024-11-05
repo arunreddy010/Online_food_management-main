@@ -1,0 +1,177 @@
+<!doctype html>
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Django Tiffin Service</title>
+
+    <style type="text/css">
+        body {
+            background: url('{% static "images/background.jpg" %}') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .card-container {
+            margin: 2rem 0;
+
+        }
+
+        .jumbotron {
+            background: rgba(255, 255, 255, 0.7); /* Make it slightly transparent for better readability */
+        }
+
+        .carousel-caption h4 {
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Responsive Image Styles */
+        .card-img-top {
+            height: 180px; /* Fixed height for uniformity */
+            object-fit: cover; /* Ensures the image covers the card */
+
+        }
+    </style>
+</head>
+
+<body>
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#"><b>Django Tiffin Service</b></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">Hello, {{ request.user.username }}!</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'admin:index' %}" class="nav-link">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class="d-block w-100" src="{% static 'images/carousel.jpeg' %}" alt="First slide">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Happy to serve you!</h1>
+            <p class="lead">You have logged in successfully. Please go through our wide range of plans and options and help
+                us serve the best suited meals for you, to you!</p>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-6 col-md-4 card-container">
+                <div class="card">
+                    <img class="card-img-top" src="{% static 'images/free1.jpg' %}" alt="Free Trial Plan">
+                    <div class="card-body">
+                        <p class="card-text">A 2 Day free trial plan.</p>
+                        <div class="text-center">
+                            <a href="{% url 'Free' %}" class="btn btn-primary">Free!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 card-container">
+                <div class="card">
+                    <img class="card-img-top" src="{% static 'images/thali_1.jpg' %}" alt="2 Weeks Vegetarian Plan">
+                    <div class="card-body">
+                        <p class="card-text">2 Weeks Vegetarian Plan</p>
+                        <div class="text-center">
+                            <a href="{% url 'TwoWeekVeg' %}" class="btn btn-primary">₹499</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 card-container">
+                <div class="card">
+                    <img class="card-img-top" src="{% static 'images/th3.jpg' %}" alt="One Month Vegetarian Plan">
+                    <div class="card-body">
+                        <p class="card-text">One month Vegetarian plan.</p>
+                        <div class="text-center">
+                            <a href="{% url 'OneMonthVeg' %}" class="btn btn-primary">₹799</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-6 col-md-4 card-container">
+                <div class="card">
+                    <img class="card-img-top" src="{% static 'images/th25.jpg' %}" alt="One Month Veg + Non Veg Plan">
+                    <div class="card-body">
+                        <p class="card-text">One month Vegetarian + Non Vegetarian Plan</p>
+                        <div class="text-center">
+                            <a href="{% url 'OneMonthVegNonVeg' %}" class="btn btn-primary">₹999</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 card-container">
+                <div class="card">
+                    <img class="card-img-top" src="{% static 'images/th24.jpg' %}" alt="3 Month Vegetarian Plan">
+                    <div class="card-body">
+                        <p class="card-text">3 Month Vegetarian Plan</p>
+                        <div class="text-center">
+                            <a href="{% url 'ThreeMonthVeg' %}" class="btn btn-primary">₹2499</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-md-4 card-container">
+                <div class="card">
+                    <img class="card-img-top" src="{% static 'images/th16.jpg' %}" alt="3 Months Veg + Non-Vegetarian Plan">
+                    <div class="card-body">
+                        <p class="card-text">3  Non - Vegetarian Plan</p>
+                        <div class="text-center">
+                            <a href="{% url 'ThreeMonthVegNonveg' %}" class="btn btn-primary">₹2699</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
