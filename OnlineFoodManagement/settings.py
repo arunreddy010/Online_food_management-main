@@ -84,14 +84,11 @@ WSGI_APPLICATION = 'OnlineFoodManagement.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'your_database_name',  # Replace with your database name
-        'USER': 'your_username',  # Replace with your MySQL username
-        'PASSWORD': 'your_password',  # Replace with your MySQL password
-        'HOST': 'localhost',  # Use 'localhost' if your MySQL is hosted locally, or use the server's IP address
-        'PORT': '3306',  # Default MySQL port (change if your MySQL uses a different port)
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
